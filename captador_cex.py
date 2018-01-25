@@ -1,6 +1,6 @@
 
 
-class capturer():
+class Capturer():
 
     def __init__(self, exchange = 'cex', pair):
         self.exchange = exchange
