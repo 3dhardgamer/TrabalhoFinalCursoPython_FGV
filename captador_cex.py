@@ -1,3 +1,16 @@
+
+
+class capturer():
+
+    def __init__(self, exchange = 'cex', pair):
+        self.exchange = exchange
+        self.pair = pair
+
+
+    def 
+
+
+
 def create_date_list(start, end):
     '''
     create_date_list(start, end):
