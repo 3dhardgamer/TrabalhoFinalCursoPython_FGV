@@ -4,6 +4,7 @@ import requests
 import json
 import pytz
 import time
+from sqlalchemy import create_engine
 
 
 class Capturer:
@@ -15,8 +16,9 @@ class Capturer:
         '''
         self.exchange = exchange
         self.pair = pair
-        self.symbol1 = self.pair.split('/')[0]
-        self.symbol2 = self.pair.split('/')[1]
+        self.symbol1 = self.pair.split('/')[0].upper()
+        self.symbol2 = self.pair.split('/')[1].upper()
+        self.conn = create_engine('sqlite:///{}_{}.sqlite'.format(self.symbol1, self.symbol2))
 
 
     def create_date_list(self):
@@ -49,11 +51,8 @@ class Capturer:
 
         return url_list
 
-    def upload_to_sqlite(self):
 
-        pass
-
-    def get_ohlcv(self, start, end, data_rate):
+    def get_ohlcv(self, start, end, data_rate = 'data1m'):
         '''
         get_ohlcv(start, end, data_rate):
         returns a string with all read fetched data from cex.io for the given pair symbol1/symbol2 between
@@ -76,11 +75,13 @@ class Capturer:
         print('Number of urls = {}'.format(len(url_list)))
         print('Time sleep = {}'.format(time_sleep))
         count_input = 0
-        data_ohlcv_list = []
+#        data_ohlcv_list = []
         for url in url_list:
             print('Reading {} -----'.format(url))
             ohlcv = eval(requests.get(url).json()[data_rate])
-            data_ohlcv_list.append(ohlcv)
+#            data_ohlcv_list.append(ohlcv)
+            print('Now upload')
+            self.upload_to_db(ohlcv)
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
 
@@ -88,4 +89,17 @@ class Capturer:
             time.sleep(time_sleep)
 
         print('Total number of inputs {}'.format(count_input))
-        return str([item for sublist in data_ohlcv_list for item in sublist])
+#        return str([item for sublist in data_ohlcv_list for item in sublist])
+
+
+    def upload_to_db(self, ohlcv):
+        self.test = ohlcv
+
+        time_format = '%Y-%m-%d %H:%M:%S'
+        date_utc = lambda x: datetime.datetime.fromtimestamp(x, tz = pytz.utc)
+        format_date = lambda x: datetime.datetime.replace(date_utc(x), tzinfo = None)
+
+        data = pd.DataFrame(ohlcv, columns = ['date', 'open', 'high', 'low', 'close', 'volume'])
+        data['date'] = pd.to_datetime(data['date'].apply(format_date, format = time_format))
+        data.set_index('date', inplace = True)
+        data.to_sql('{}_{}.sqlite'.format(self.symbol1, self.symbol2), self.conn, if_exists = 'append')
