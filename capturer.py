@@ -21,7 +21,7 @@ class Capturer():
 
     def create_date_list(self):
         '''
-        create_date_list(start, end):
+        create_date_list():
         returns a list of dates from start to end with format 'YYYYMMDD' and type string.
         '''
 
@@ -37,7 +37,7 @@ class Capturer():
 
     def create_url_list(self):
         '''
-        create_url_list(symbol1, symbol2, start, end):
+        create_url_list():
         returns a list of urls from start to end date of the symbol1/symbol2 transaction.
         '''
 
@@ -54,7 +54,7 @@ class Capturer():
 
     def get_ohlcv(self, start, end, data_rate):
         '''
-        get_ohlcv(symbol1, symbol2, start, end, data_rate):
+        get_ohlcv(start, end, data_rate):
         returns a string with all read fetched data from cex.io for the given pair symbol1/symbol2 between
         the starting and ending dates and with data rate (1m, 1h or 1d).
 
@@ -62,8 +62,6 @@ class Capturer():
         Cex rate limit is 600 requests per 10 minutes (1 request per second).
 
         parameters:
-        symbol1   -> Cryptocurrency acronym (string).
-        symbol2   -> Currency acronym (string).
         start     -> Starting date with format 'YYYY-MM-DD' (string).
         end       -> Ending date with format 'YYYY-MM-DD' (string).
         data_rate -> Data rate, cex.io gives the following options: 'data1m', 'data1h' or 'data1d'.
