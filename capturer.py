@@ -75,12 +75,10 @@ class Capturer:
         print('Number of urls = {}'.format(len(url_list)))
         print('Time sleep = {}'.format(time_sleep))
         count_input = 0
-#        data_ohlcv_list = []
         for url in url_list:
             print('Reading {} -----'.format(url))
             ohlcv = eval(requests.get(url).json()[data_rate])
-#            data_ohlcv_list.append(ohlcv)
-            print('Now upload')
+            print('Uploading to database...')
             self.upload_to_db(ohlcv)
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
@@ -89,7 +87,6 @@ class Capturer:
             time.sleep(time_sleep)
 
         print('Total number of inputs {}'.format(count_input))
-#        return str([item for sublist in data_ohlcv_list for item in sublist])
 
 
     def upload_to_db(self, ohlcv):
@@ -100,6 +97,6 @@ class Capturer:
         format_date = lambda x: datetime.datetime.replace(date_utc(x), tzinfo = None)
 
         data = pd.DataFrame(ohlcv, columns = ['date', 'open', 'high', 'low', 'close', 'volume'])
-        data['date'] = pd.to_datetime(data['date'].apply(format_date, format = time_format))
+        data['date'] = pd.to_datetime(data['date'].apply(format_date), format = time_format)
         data.set_index('date', inplace = True)
-        data.to_sql('{}_{}.sqlite'.format(self.symbol1, self.symbol2), self.conn, if_exists = 'append')
+        data.to_sql('{}_{}'.format(self.symbol1.lower(), self.symbol2.lower()), self.conn, if_exists = 'append', index = True)
