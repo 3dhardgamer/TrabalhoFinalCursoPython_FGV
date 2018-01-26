@@ -3,12 +3,12 @@ import datetime
 import requests
 import json
 import pytz
+import time
 
 
+class Capturer:
 
-class Capturer():
-
-    def __init__(self, exchange = 'cex', pair):
+    def __init__(self, pair, exchange = 'cex'):
         '''
         symbol1   -> Cryptocurrency acronym (string).
         symbol2   -> Currency acronym (string).
@@ -41,7 +41,7 @@ class Capturer():
         returns a list of urls from start to end date of the symbol1/symbol2 transaction.
         '''
 
-        date_list = create_date_list()
+        date_list = self.create_date_list()
         url_list = list()
         for date in date_list:
             url = 'http://cex.io/api/ohlcv/hd/{}/{}/{}'.format(date, self.symbol1, self.symbol2)
@@ -50,6 +50,7 @@ class Capturer():
         return url_list
 
     def upload_to_sqlite(self):
+
         pass
 
     def get_ohlcv(self, start, end, data_rate):
@@ -66,9 +67,9 @@ class Capturer():
         end       -> Ending date with format 'YYYY-MM-DD' (string).
         data_rate -> Data rate, cex.io gives the following options: 'data1m', 'data1h' or 'data1d'.
         '''
-        self.start = datetime.datetime.strftime(start, '%Y-%m-%d')
-        self.end = datetime.datetime.strftime(end, '%Y-%m-%d')
-        url_list = create_url_list()
+        self.start = datetime.datetime.strptime(start, '%Y-%m-%d')
+        self.end = datetime.datetime.strptime(end, '%Y-%m-%d')
+        url_list = self.create_url_list()
 
         # time_sleep: guarantees that no more than 1 request per second is done.
         time_sleep = 1.1
@@ -82,6 +83,7 @@ class Capturer():
             data_ohlcv_list.append(ohlcv)
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
+
             print('Finished -----')
             time.sleep(time_sleep)
 
