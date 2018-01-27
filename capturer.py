@@ -84,7 +84,7 @@ class Capturer:
             self.upload_to_db(ohlcv)
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
-            print('Finished -----')
+            print('Finished -----\n')
             time.sleep(time_sleep)
 
 #        clear_output()
