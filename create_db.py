@@ -5,6 +5,7 @@ from sqlalchemy import create_engine, MetaData, Table, select
 
 database = 'ohlcv_db.sqlite'
 
+
 def create_table(pair, start, end):
     capt = Capturer(pair)
     capt.get_ohlcv(start, end)
@@ -34,7 +35,6 @@ def ask_dates():
         end_date = validate_date('ending')
 
     return [start_date, end_date]
-
 
 
 if os.path.isfile(database) == True:
