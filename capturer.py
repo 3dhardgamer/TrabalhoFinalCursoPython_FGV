@@ -79,13 +79,23 @@ class Capturer:
         count_input = 0
         for url in url_list:
             print('Reading {} -----'.format(url))
-            ohlcv = eval(requests.get(url).json()[data_rate])
-            print('Uploading to database...')
-            self.upload_to_db(ohlcv)
-            print('Fetch input data size {}'.format(len(ohlcv)))
-            count_input += len(ohlcv)
-            print('Finished -----\n')
-            time.sleep(time_sleep)
+            ohlcv = requests.get(url).json()
+            if ohlcv == None:
+                print('This url is EMPTY, moving to the next one...\n')
+                continue
+            else:
+                print('Uploading to database...')
+                # Replace ohlcv with the list of data.
+                ohlcv = eval(ohlcv[data_rate])
+                if len(ohlcv) == 0:
+                    print('This data is EMPTY, moving to the next one...\n')
+                    continue
+                else:
+                    self.upload_to_db(ohlcv)
+                    print('Fetch input data size {}'.format(len(ohlcv)))
+                    count_input += len(ohlcv)
+                    print('Finished -----\n')
+                    time.sleep(time_sleep)
 
 #        clear_output()
         print('Total number of inputs {}'.format(count_input))
