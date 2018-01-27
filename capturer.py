@@ -6,7 +6,7 @@ import pytz
 import time
 from sqlalchemy import create_engine
 from sqlalchemy import DateTime, Float
-from IPython.display import clear_output
+#from IPython.display import clear_output
 
 
 class Capturer:
@@ -87,7 +87,7 @@ class Capturer:
             print('Finished -----')
             time.sleep(time_sleep)
 
-        clear_output()
+#        clear_output()
         print('Total number of inputs {}'.format(count_input))
 
 
