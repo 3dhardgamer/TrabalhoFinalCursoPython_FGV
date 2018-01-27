@@ -53,11 +53,11 @@ if os.path.isfile(database) == True:
 
     overwrite = input('Do you want to overwrite the database? ["y" - yes; "n" - no] ')
     if overwrite == 'y':
-        print('Overwriting the database...')
+        print('\nOverwriting the database...\n')
         os.remove(database)
 
         dates = ask_dates()
-        print('This might take a while... please be patient.')
+        print('\nThis might take a while... please be patient.\n')
         create_table('ETH/USD', dates[0], dates[1])
         create_table('ETH/EUR', dates[0], dates[1])
         create_table('BTC/USD', dates[0], dates[1])
@@ -69,11 +69,11 @@ if os.path.isfile(database) == True:
         print('\nSo proceed to the next section. Thanks! ;)\n')
 
 else:
-    print('Database does not exist yet.')
+    print('\nDatabase does not exist yet.\n')
     dates = ask_dates()
 
-    print('Creating database...')
-    print('This might take a while... please be patient.')
+    print('\nCreating database...')
+    print('This might take a while... please be patient.\n')
     create_table('ETH/USD', dates[0], dates[1])
     create_table('ETH/EUR', dates[0], dates[1])
     create_table('BTC/USD', dates[0], dates[1])
