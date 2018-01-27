@@ -5,6 +5,7 @@ import json
 import pytz
 import time
 from sqlalchemy import create_engine
+from IPython.display import clear_output
 
 
 class Capturer:
@@ -73,7 +74,7 @@ class Capturer:
         # time_sleep: guarantees that no more than 1 request per second is done.
         time_sleep = 1.1
         print('Number of urls = {}'.format(len(url_list)))
-        print('Time sleep = {}'.format(time_sleep))
+#        print('Time sleep = {}'.format(time_sleep))
         count_input = 0
         for url in url_list:
             print('Reading {} -----'.format(url))
@@ -82,16 +83,14 @@ class Capturer:
             self.upload_to_db(ohlcv)
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
-
             print('Finished -----')
+            clear_output()
             time.sleep(time_sleep)
 
         print('Total number of inputs {}'.format(count_input))
 
 
     def upload_to_db(self, ohlcv):
-        self.test = ohlcv
-
         time_format = '%Y-%m-%d %H:%M:%S'
         date_utc = lambda x: datetime.datetime.fromtimestamp(x, tz = pytz.utc)
         format_date = lambda x: datetime.datetime.replace(date_utc(x), tzinfo = None)
