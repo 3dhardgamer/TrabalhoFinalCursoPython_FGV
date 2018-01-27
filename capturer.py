@@ -5,6 +5,7 @@ import json
 import pytz
 import time
 from sqlalchemy import create_engine
+from sqlalchemy import DateTime, Float
 from IPython.display import clear_output
 
 
@@ -19,7 +20,7 @@ class Capturer:
         self.pair = pair
         self.symbol1 = self.pair.split('/')[0].upper()
         self.symbol2 = self.pair.split('/')[1].upper()
-        self.conn = create_engine('sqlite:///{}_{}.sqlite'.format(self.symbol1, self.symbol2))
+        self.conn = create_engine('sqlite:///ohlcv_db.sqlite')
 
 
     def create_date_list(self):
@@ -84,9 +85,9 @@ class Capturer:
             print('Fetch input data size {}'.format(len(ohlcv)))
             count_input += len(ohlcv)
             print('Finished -----')
-            clear_output()
             time.sleep(time_sleep)
 
+        clear_output()
         print('Total number of inputs {}'.format(count_input))
 
 
@@ -98,4 +99,5 @@ class Capturer:
         data = pd.DataFrame(ohlcv, columns = ['date', 'open', 'high', 'low', 'close', 'volume'])
         data['date'] = pd.to_datetime(data['date'].apply(format_date), format = time_format)
         data.set_index('date', inplace = True)
-        data.to_sql('{}_{}'.format(self.symbol1.lower(), self.symbol2.lower()), self.conn, if_exists = 'append', index = True)
+        data.to_sql('{}_{}'.format(self.symbol1.lower(), self.symbol2.lower()), self.conn, if_exists = 'append',
+                dtype = {'date': DateTime, 'open': Float, 'high': Float, 'low': Float, 'close': Float, 'volume': Float})
