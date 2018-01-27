@@ -82,6 +82,7 @@ class Capturer:
             ohlcv = requests.get(url).json()
             if ohlcv == None:
                 print('This url is EMPTY, moving to the next one...\n')
+                time.sleep(time_sleep/10)
                 continue
             else:
                 print('Uploading to database...')
@@ -89,6 +90,7 @@ class Capturer:
                 ohlcv = eval(ohlcv[data_rate])
                 if len(ohlcv) == 0:
                     print('This data is EMPTY, moving to the next one...\n')
+                    time.sleep(time_sleep/10)
                     continue
                 else:
                     self.upload_to_db(ohlcv)
