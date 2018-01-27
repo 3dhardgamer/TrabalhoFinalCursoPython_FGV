@@ -9,7 +9,7 @@ database = 'ohlcv_db.sqlite'
 def create_table(pair, start, end):
     capt = Capturer(pair)
     capt.get_ohlcv(start, end)
-    print('Table {} is done!'.format(pair))
+    print('Table {} is done!\n\n'.format(pair))
 
 
 def validate_date(moment):
