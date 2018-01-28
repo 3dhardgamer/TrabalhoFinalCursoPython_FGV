@@ -37,6 +37,8 @@ def ask_dates():
     return [start_date, end_date]
 
 
+markets = ['BTC/EUR', 'BTC/USD', 'ETH/EUR', 'ETH/USD', 'ZEC/EUR', 'ZEC/USD']
+
 if os.path.isfile(database) == True:
     print('The database already exists!\n')
     engine = create_engine('sqlite:///{}'.format(database))
@@ -58,12 +60,8 @@ if os.path.isfile(database) == True:
 
         dates = ask_dates()
         print('\nThis might take a while... please be patient.\n')
-        create_table('ETH/USD', dates[0], dates[1])
-        create_table('ETH/EUR', dates[0], dates[1])
-        create_table('BTC/USD', dates[0], dates[1])
-        create_table('BTC/EUR', dates[0], dates[1])
-        create_table('ZEC/USD', dates[0], dates[1])
-        create_table('ZEC/EUR', dates[0], dates[1])
+        for pair in markets:
+            create_table(pair, dates[0], dates[1])
 
     else:
         print('\nSo proceed to the next section. Thanks! ;)\n')
@@ -74,11 +72,7 @@ else:
 
     print('\nCreating database...')
     print('This might take a while... please be patient.\n')
-    create_table('ETH/USD', dates[0], dates[1])
-    create_table('ETH/EUR', dates[0], dates[1])
-    create_table('BTC/USD', dates[0], dates[1])
-    create_table('BTC/EUR', dates[0], dates[1])
-    create_table('ZEC/USD', dates[0], dates[1])
-    create_table('ZEC/EUR', dates[0], dates[1])
+    for pair in markets:
+        create_table(pair, dates[0], dates[1])
 
 
