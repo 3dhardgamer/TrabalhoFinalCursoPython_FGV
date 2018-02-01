@@ -25,6 +25,7 @@ A few comments regarding the project:
   * holoviews = 1.9.2
   * numpy = 1.14.0
   * pandas = 0.22.0
+  * plotly = 2.2.3
   * pytz = 2017.3
   * requests = 2.18.4
   * sqlachemy = 1.2.1
